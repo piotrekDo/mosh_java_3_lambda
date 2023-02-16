@@ -74,3 +74,15 @@ W rezultacie otrzymamy czytelny zapis w postaci jednej linijki:
 ``greet(message -> System.out.println(message));``  
   
 
+### this, różnice mięcy wyrażeniami lambda i klasami anonimowymi
+W wyrażeniach lambda słowo kluczowe ``this`` odnosi się do klasy w której wyrażenie jest zapisywane. W przypadku klas anonimowych
+``this`` osniesie się do samej siebie, konkretnej implementacji, nie interfejsu który klasa nadpisuje. Klasy anonimowe
+mogą posiadać pola, wyrażenia lambda nie. Jeden i drugi zapis pozwala odnosić się do pól klasy w której się poruszamy.
+
+## Referencje do metod
+Z referencji do metod możemy skorzystać gdy w ramach implementacji interfejsu wzystko co robimy to przekazanie obiektu
+do metody, jak w przykładnie z interfejsem ``Print``. Schemat takiego zapisu wygląda następująco: **klasa/obiekt::metoda** 
+np. ``greet(System.out::println);`` gdzie ``System.out`` jest obiektem zawierającym metodę ``println`` oddzieloną dwoma dwukropkami.
+
+## Referencje do konstruktorów
+Dzialanie jest identyczne w przypadku konstruktorów wywoływanych jako ``obiekt::new``

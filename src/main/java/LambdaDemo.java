@@ -1,6 +1,9 @@
 public class LambdaDemo {
 
+    private String lol = "lol";
+
     void show() {
+
         // wywołanie implementacji interfejsu
         greet(new ConsolePrinter());
 
@@ -8,13 +11,13 @@ public class LambdaDemo {
         greet(new Print() {
             @Override
             public void print(String message) {
-                System.out.println(message);
+                System.out.println(lol + message);
             }
         });
 
         //lambda
         greet((String message) -> {
-            System.out.println(message);
+            System.out.println( lol+ message);
         });
 
         //lambda krótki zapis

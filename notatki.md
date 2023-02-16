@@ -86,3 +86,80 @@ np. ``greet(System.out::println);`` gdzie ``System.out`` jest obiektem zawieraj�
 
 ## Referencje do konstruktorów
 Dzialanie jest identyczne w przypadku konstruktorów wywoływanych jako ``obiekt::new``
+
+## Zapis w postaci zmiennej
+Istnieje jeszcze jedna forma zapisu lambdy w postaci zmiennych jak poniżej:  
+``Consumer<String> print = System.out::println;``  
+można tutaj stosować słowa kluczowe jak ``private`` czy ``final``. Taki zapis rónież pozwala na stosowanie referencji jako
+skrótu do powtarzalnego, długiego zapisu, np:  
+``private final Consumer<String> printUppercase = item -> System.out.println(item.toUpperCase());``
+
+# Typy interfejsów funkcyjnych
+Pakiet ``java.util.function`` dostarcza wiele interfejsów funkcyjnych, jednak możemy je pogrupować na 4 typy:
+- **Consumer** przyjmująpojedyńczy argument, nie zwracają wyniku, są void.
+- **Supplier** nie przyjmuje argumantu, zwraca obiekt.
+- **Function** przyjmuje argument i zwraca wartośc, mappuje ją.
+- **Predicate** przyjmuje argumet i zwraca wartość ``boolean``.
+  
+**Consumer** istnieje w różnych implementacjach, przyjmujących kilka argumentów lub wartośći prymitywne co pozwala uniknąć
+autoboxingu. Przykładem może być metoda ``forEach`` pozwalająca wykonać jakąś operacę na każdym obiektcie kolekcji.  
+Interejs funkcyjny ``consumer`` zawiera metodą abstrakcyjną ``accept`` a także przydatną metodę domyślną ``andThen`` 
+pozwalającą na wykonanie łańcucha wywołań.
+```
+public class ConsumerDemo {
+    private final Consumer<String> print = System.out::print;
+    private final Consumer<String> printUppercase = item -> System.out.print(item.toUpperCase());
+    private final Consumer<String> printLowercase = item -> System.out.print(item.toLowerCase());
+
+    void show() {
+        List<String> list = List.of("a", "b", "c");
+        list.forEach(print.andThen(printUppercase).andThen(printLowercase));
+    }
+}
+
+REZULTAT: aAabBbcCc
+```
+  
+**Supplier** zawiera metodę abstrakcyjną ``get``. Funkcja nie zostanie wykonana bez wywołania tej metody. Podobnie jak Consumer,
+Supplier występuje w odpowiednich wersjach dla typów prymitywnych jak np. ``IntSupplier``. 
+```
+public class SupplierDemo {
+    private final Supplier<Double> getRandom = Math::random;
+    void show(){
+        System.out.println(getRandom.get());
+    }
+}
+```
+  
+**Function** przyjmuje dwa argumenty- obiekt przekazywany i typ zwracany. Istnije również ``BiFunction`` przyjmujący dwa
+obiekty i zwracający jeden rezultat. Istnieją rónież wersje dla typów prymitywnych jak ``IntFunction<R>`` dla których
+deklarujemy tylko typ zwracany. Istnieją także wersje zwracające typ prymitywny przyjmując obiekt jak ``ToIntFunction<T>``,
+tutaj podajemy obiekt, który pozwoli nam zwrócić ``int``. Istnieje też specjalna wesja zwracająca inne typy primitywne z
+przekazanego jak ``IntToLongFunction`` przyjmująca ``int`` jako argument a zwracająca ``long``.
+```
+public class FunctionDemo {
+    private final Function<String, Integer> mapStrToInt = String::length;
+    void show(){
+        mapStrToInt.apply("Sky");
+    }
+}
+```
+  
+Łańcuch wywołań. Podobnie jak w przypadku Supplier'a, dla Function możemy zastosować metodę ``andThen`` pozwalającą
+na złączenie kilku Function w jeden.
+```
+public class FunctionDemo {
+    private final Function<String, String> replaceColon = str -> str.replace(":", "=");
+    private final Function<String, String> addBraces = str -> "{" + str + "}";
+
+    void show(){
+        System.out.println(replaceColon.andThen(addBraces).apply("key:value"));
+    }
+}
+```
+  
+Alternatywnie można wykorzystać metodę ``compose`` działającą w taki sam sposób, ale w odwrotnej kolejności  
+``System.out.println(addBraces.compose(replaceColon).apply("key:value"));``  
+Podajemy więc kolejne funkcje od końca.   
+  
+**Predicate** stosowany głównie przy filtrowaniu, w ciele metody sprawdzamy czy przekazany obiekt spełnia jakieś kryteria.

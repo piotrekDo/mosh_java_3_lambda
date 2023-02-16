@@ -5,7 +5,13 @@ public class Main {
         ConsumerDemo consumerDemo = new ConsumerDemo();
         SupplierDemo supplierDemo = new SupplierDemo();
         FunctionDemo functionDemo = new FunctionDemo();
-        functionDemo.show();
+        PredicateDemo predicateDemo = new PredicateDemo();
+        BinaryOperatorDemo binaryOperatorDemo = new BinaryOperatorDemo();
+        UnaryOperatorDemo unaryOperatorDemo = new UnaryOperatorDemo();
+        unaryOperatorDemo.show();
+//        binaryOperatorDemo.show();
+//        predicateDemo.show();
+//        functionDemo.show();
 //        supplierDemo.show();
 //        lambdaDemo.show();
 //        consumerDemo.show();

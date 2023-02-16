@@ -163,3 +163,35 @@ Alternatywnie można wykorzystać metodę ``compose`` działającą w taki sam s
 Podajemy więc kolejne funkcje od końca.   
   
 **Predicate** stosowany głównie przy filtrowaniu, w ciele metody sprawdzamy czy przekazany obiekt spełnia jakieś kryteria.
+Podobnie jak w poprzednich typach, Predicate również można łączyć aby otrzymać bardziej złożony warunek z wykorzystaniem
+metod ``.and``, ``.or``
+```
+    void show(){
+        Predicate<String> hasLeftBrace = str -> str.startsWith("{");
+        Predicate<String> hasRightBrace = str -> str.endsWith("}");
+        System.out.println(hasLeftBrace.and(hasRightBrace).test("{LOL}"));;
+    }
+```
+W przyapadku Predicate możemy rónwnież zastosować metodę ``.negate``: ``hasLeftBrace.negate()``.
+
+#### Binary Operator
+Specjalny typ Funkcion. Pozwalają na funkcyjny zapis funkcji artmetycznych. Pozwala to tworzyć funkce matematyczne.
+```
+public class BinaryOperatorDemo {
+    BinaryOperator<Integer> add = (a, b) -> a + b;
+    Function<Integer, Integer> square = a -> a * a;
+
+    BiFunction<Integer, Integer, Integer> addAndSquare = add.andThen(square);
+
+    void show() {
+        System.out.println(add.andThen(square).apply(1,2));
+        System.out.println(addAndSquare.apply(1,2));
+    }
+}
+```
+
+#### Unary Operator
+Kolejny specjalny typ interfeju Function. Od samego Function różni się tym, że wymaga aby obikety przekazany i zwrócony
+był tego samego typu. Nie posłuży nam do mapowania obiektów na inny. Można w ten sposób wymusić pewne zachowania, np. 
+możemy posłużyć się takim interfejsem w celu zmiany np. nazwiska jakiejś osoby, wówczas na wejściu i wyjściu mamy ten sam
+obiekt typu Person. Może również posłużyć do klonowania obiektów. 
